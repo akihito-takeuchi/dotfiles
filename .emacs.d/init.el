@@ -22,13 +22,14 @@
 	(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
 	    (normal-top-level-add-subdirs-to-load-path))))))
 
-(add-to-load-path "elisp" "conf")
+(add-to-load-path "elisp" "conf" "public_repos")
 
-(when (require 'package nil t)
-  (add-to-list 'package-archives
-               '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
-  (package-initialize))
+(when (= emacs-major-version 23)
+  (when (require 'package nil t)
+    (add-to-list 'package-archives
+                 '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
+    (package-initialize)))
 
 (require 'init-loader)
 (init-loader-load "~/.emacs.d/conf")
@@ -55,7 +56,7 @@
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
                "~/.emacs.d/elisp/ac-dict")
-  (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+  (define-key ac-mode-map (kbd "C-TAB") 'auto-complete)
   (ac-config-default)
   (setq ac-delay 0.1))
 
@@ -63,10 +64,36 @@
   (setq multi-term-program "/bin/bash")
   (global-set-key (kbd "M-s") 'multi-term))
 
-(load-file "~/.emacs.d/cedet/common/cedet.el")
+(load-file "~/.emacs.d/public_repos/cedet-1.1/common/cedet.el")
 (global-ede-mode 1)
 (semantic-load-enable-code-helpers)
 (global-srecode-minor-mode 1)
+
+(if (= emacs-major-version 23)
+    (when (require 'anything nil t)
+      (setq
+       anything-idle-delay 0.3
+       anything-input-idle-delay 0.2
+       anything-quick-update t
+       anything-enable-shortcuts 'alphabet)
+      (when (require 'anything-config nil t)
+        (setq
+         anything-su-or-sudo "sudo"))
+      (require 'anything-match-plugin nil t)
+      (when (require 'anything-complete nil t)
+        (anything-lisp-complete-symbol-set-timer 150))
+      (require 'anything-show-completion nil t)
+      (when (require 'auto-install nil t)
+        (require 'anything-auto-install nil t))
+      (when (require 'descbinds-anything nil t)
+        (descbinds-anything-install)))
+  
+  (when (require 'helm-config nil t)
+    (global-set-key (kbd "C-c h") 'helm-mini)
+    (helm-mode 1)
+    (setq helm-idle-delay 0.2
+          helm-input-idle-delay 0.2
+          helm-quick-update t)))
 
 ;;; colorize files 
 (require 'font-lock)
@@ -82,20 +109,21 @@
 
 (setq-default indent-tabs-mode nil)
 
-(require 'mozc)
-(set-language-environment "Japanese")
-(prefer-coding-system 'utf-8)
-(setq file-name-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
-(setq default-input-method "japanese-mozc")
-(setq mozc-candidate-style 'overlay)
+(when (require 'mozc nil t)
+  (set-language-environment "Japanese")
+  (prefer-coding-system 'utf-8)
+  (setq file-name-coding-system 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (setq default-input-method "japanese-mozc")
+  (setq mozc-candidate-style 'overlay)
+
+  (setq mozc-cursor-color "lightblue")
+  (add-hook 'input-method-activate-hook
+            (lambda () (set-cursor-color mozc-cursor-color)))
+  (add-hook 'input-method-inactivate-hook
+            (lambda () (set-cursor-color default-cursor-color))))
 
 (setq default-cursor-color "white")
-(setq mozc-cursor-color "lightblue")
-(add-hook 'input-method-activate-hook
-          (lambda () (set-cursor-color mozc-cursor-color)))
-(add-hook 'input-method-inactivate-hook
-          (lambda () (set-cursor-color default-cursor-color)))
 (set-cursor-color default-cursor-color)
 
 (global-set-key [delete] 'delete-char)
@@ -112,7 +140,6 @@
 (global-set-key [f11] 'kill-this-buffer)
 (global-set-key [f12] 'new-frame)
 (global-set-key [pause] 'advertised-undo)
-(keyboard-translate ?\C-h ?\C-?)
 (global-set-key (kbd "C-x ?") 'help-command)
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
@@ -121,6 +148,7 @@
 (global-set-key (kbd "C-x C-m") 'compile)
 (global-set-key (kbd "C-m") 'newline-and-indent)
 (global-set-key (kbd "C-t") 'other-window)
+(keyboard-translate ?\C-h ?\C-?)
 
 (custom-set-variables
  '(user-mail-address "atakeuti2@gmail.com" t))
@@ -260,5 +288,3 @@
 ;; (pymacs-load "ropemacs" "rope-")
 ;; (setq ropemacs-enable-autoimport t)
 
-;; (require 'auto-complete)
-;; (global-auto-complete-mode t)
