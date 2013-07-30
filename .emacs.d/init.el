@@ -31,9 +31,6 @@
     (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
     (package-initialize)))
 
-(require 'init-loader)
-(init-loader-load "~/.emacs.d/conf")
-
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
   (auto-install-update-emacswiki-package-name t)
