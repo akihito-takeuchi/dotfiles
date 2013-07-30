@@ -86,7 +86,13 @@
       (when (require 'auto-install nil t)
         (require 'anything-auto-install nil t))
       (when (require 'descbinds-anything nil t)
-        (descbinds-anything-install)))
+        (descbinds-anything-install))
+      (require 'anything-c-moccur)
+      (setq moccur-split-word t)
+      (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
+      (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
+      (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
+      )
   
   (when (require 'helm-config nil t)
     (global-set-key (kbd "C-c h") 'helm-mini)
@@ -94,6 +100,8 @@
     (setq helm-idle-delay 0.2
           helm-input-idle-delay 0.2
           helm-quick-update t)))
+
+(require 'egg)
 
 ;;; colorize files 
 (require 'font-lock)
@@ -105,7 +113,7 @@
 
 (setq visible-bell nil)
 
-(add-to-list 'default-frame-alist '(font . "mono:size=16"))
+(add-to-list 'default-frame-alist '(font . "mono:size=15"))
 
 (setq-default indent-tabs-mode nil)
 
@@ -124,7 +132,8 @@
             (lambda () (set-cursor-color default-cursor-color))))
 
 (setq default-cursor-color "white")
-(set-cursor-color default-cursor-color)
+;(set-cursor-color default-cursor-color)
+(set-face-background 'cursor default-cursor-color)
 
 (global-set-key [delete] 'delete-char)
 (global-set-key "\M-g" 'goto-line)
@@ -148,7 +157,7 @@
 (global-set-key (kbd "C-x C-m") 'compile)
 (global-set-key (kbd "C-m") 'newline-and-indent)
 (global-set-key (kbd "C-t") 'other-window)
-(keyboard-translate ?\C-h ?\C-?)
+(define-key key-translation-map [?\C-h] [?\C-?])
 
 (custom-set-variables
  '(user-mail-address "atakeuti2@gmail.com" t))
@@ -256,7 +265,7 @@
             (setq auto-fill-mode -1)
             (setq nxml-slash-auto-complete-flag t)
 	    (setq nxml-child-indent 2)))
-
+(define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)
 ;(require 'w3m-load)
 
 
