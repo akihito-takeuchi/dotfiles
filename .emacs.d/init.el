@@ -36,9 +36,12 @@
   (auto-install-update-emacswiki-package-name t)
   (auto-install-compatibility-setup))
 
+;; (install-elisp-from-emacswiki "redo+.el")
 (when (require 'redo+ nil t)
   (global-set-key (kbd "C-'") 'redo))
 
+;; (install-elisp-from-emacswiki "color-moccur.el")
+;; (install-elisp-from-emacswiki "moccur-edit.el")
 (when (require 'color-moccur nil t)
   (define-key global-map (kbd "M-o") 'occur-by-moccur)
   (setq moccur-split-word t)
@@ -50,6 +53,8 @@
 (define-key dired-mode-map "r"
   'wdired-change-to-wdired-mode)
 
+;; (auto-install-batch "auto-complete development version")
+(auto-install-update-emacswiki-package-name t)
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
                "~/.emacs.d/elisp/ac-dict")
@@ -57,6 +62,7 @@
   (ac-config-default)
   (setq ac-delay 0.1))
 
+;; (install-elisp-from-emacswiki "multi-shell.el")
 (when (require 'multi-term nil t)
   (setq multi-term-program "/bin/bash")
   (global-set-key (kbd "M-s") 'multi-term))
@@ -261,8 +267,8 @@
           (lambda ()
             (setq auto-fill-mode -1)
             (setq nxml-slash-auto-complete-flag t)
-	    (setq nxml-child-indent 2)))
-(define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)
+	    (setq nxml-child-indent 2)
+            (define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)))
 ;(require 'w3m-load)
 
 
