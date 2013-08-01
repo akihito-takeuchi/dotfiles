@@ -53,6 +53,25 @@
 (define-key dired-mode-map "r"
   'wdired-change-to-wdired-mode)
 
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(setq uniquify-ignore-buffers-re "*[^*]+*")
+
+(iswitchb-mode 1)
+(setq read-buffer-function 'iswitchb-read-buffer)
+(setq iswitchb-regexp nil)
+(setq iswitchb-prompt-newbuffer nil)
+
+(setq recentf-max-saved-items 500)
+(setq recentf-exclude '("/TAGS$" "/var/tmp/"))
+(require 'recentf-ext)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
+;; (install-elisp-from-emacswiki "key-chord.el")
+(when (require 'key-chord nil t)
+  (setq key-chord-two-keys-delay 0.04)
+  (key-chord-mode 1))
+
 ;; (auto-install-batch "auto-complete development version")
 (auto-install-update-emacswiki-package-name t)
 (when (require 'auto-complete-config nil t)
@@ -66,6 +85,10 @@
 (when (require 'multi-term nil t)
   (setq multi-term-program "/bin/bash")
   (global-set-key (kbd "M-s") 'multi-term))
+
+;; (auto-install-batch "sequential-command")
+(when (require 'sequential-command-config nil t)
+  (sequential-command-setup-keys))
 
 (load-file "~/.emacs.d/public_repos/cedet-1.1/common/cedet.el")
 (global-ede-mode 1)
