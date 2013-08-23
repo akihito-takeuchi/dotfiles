@@ -293,7 +293,12 @@
             (setq nxml-slash-auto-complete-flag t)
 	    (setq nxml-child-indent 2)
             (define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)))
-(require 'w3m-load)
+(when (require 'w3m-load nil t)
+  (global-set-key (kbd "C-c w") 'w3m-goto-url)
+  (setq w3m-home-page "http://www.google.co.jp")
+  (add-hook 'w3m-mode-hook
+            (lambda ()
+              (define-key w3m-mode-map (kbd "C-t") 'other-window))))
 
 ;------------------------
 ; Setup for python mode
