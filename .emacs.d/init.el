@@ -73,13 +73,14 @@
   (key-chord-mode 1))
 
 ;; (auto-install-batch "auto-complete development version")
-(auto-install-update-emacswiki-package-name t)
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
                "~/.emacs.d/elisp/ac-dict")
   (define-key ac-mode-map (kbd "C-TAB") 'auto-complete)
+  (setq ac-auto-start 4)
   (ac-config-default)
-  (setq ac-delay 0.1))
+  (setq ac-delay 0.1)
+  (setq ac-auto-show-menu 0.2))
 
 ;; (install-elisp-from-emacswiki "multi-shell.el")
 (when (require 'multi-term nil t)
@@ -292,8 +293,7 @@
             (setq nxml-slash-auto-complete-flag t)
 	    (setq nxml-child-indent 2)
             (define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)))
-;(require 'w3m-load)
-
+(require 'w3m-load)
 
 ;------------------------
 ; Setup for python mode
