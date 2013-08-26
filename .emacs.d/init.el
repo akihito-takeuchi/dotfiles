@@ -162,6 +162,9 @@
 ;(set-cursor-color default-cursor-color)
 (set-face-background 'cursor default-cursor-color)
 
+(cua-mode t)
+(setq cua-enable-cua-keys nil)
+
 (global-set-key [delete] 'delete-char)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-c\C-r" 'revert-buffer)
