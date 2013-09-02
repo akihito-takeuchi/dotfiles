@@ -96,6 +96,8 @@
 (semantic-load-enable-code-helpers)
 (global-srecode-minor-mode 1)
 
+;; (auto-install-batch "anything")
+;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
 (if (= emacs-major-version 23)
     (when (require 'anything nil t)
       (setq
@@ -117,16 +119,17 @@
       (require 'anything-c-moccur)
       (setq moccur-split-word t)
       (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
+      (global-set-key (kbd "C-:") 'anything-for-files)
       (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
       (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
-      )
+      ))
   
-  (when (require 'helm-config nil t)
-    (global-set-key (kbd "C-c h") 'helm-mini)
-    (helm-mode 1)
-    (setq helm-idle-delay 0.2
-          helm-input-idle-delay 0.2
-          helm-quick-update t)))
+(when (require 'helm-config nil t)
+  (global-set-key (kbd "C-c h") 'helm-mini)
+  (helm-mode 1)
+  (setq helm-idle-delay 0.2
+        helm-input-idle-delay 0.2
+        helm-quick-update t))
 
 (require 'egg)
 
@@ -202,6 +205,33 @@
               auto-mode-alist))
 
 (delete-selection-mode 1)
+
+;; (auto-instal-from-url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
+(when (require 'php-mode nil t)
+  (setq php-mode-force-pear t)
+  (add-to-list 'auto-mode-alist '("\\.php$" . php-mode)))
+;; (auto-install-batch "php-completion")
+(add-hook 'php-completion
+          (lambda ()
+            (require 'php-completion)
+            (php-completion-mode t)
+            (define-key php-mode-map (kbd "C-o") 'phpcomp-complete)
+            (make-local-variable 'ac-sources)
+            (setq  ac-sources '(
+                               ac-source-words-in-same-mode-buffers
+                               ac-source-php-completion
+                               ac-source-filename
+                               ))))
+(require 'cl)
+(when (require 'cake nil t)
+  (global-cake t)
+  (cake-set-default-keymap)
+  (add-hook 'php-mode-hook
+            (lambda ()
+              (make-local-variable 'ac-sources)
+              (setq ac-sources '(ac-source-cake
+                                 ac-source-php-completion)))))
+
 (autoload 'cperl-mode
   "cperl-mode"
   "alternate mode for editing Perl programs" t)
