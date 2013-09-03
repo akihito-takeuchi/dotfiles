@@ -98,38 +98,29 @@
 
 ;; (auto-install-batch "anything")
 ;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
-(if (= emacs-major-version 23)
-    (when (require 'anything nil t)
-      (setq
-       anything-idle-delay 0.3
-       anything-input-idle-delay 0.2
-       anything-quick-update t
-       anything-enable-shortcuts 'alphabet)
-      (when (require 'anything-config nil t)
-        (setq
-         anything-su-or-sudo "sudo"))
-      (require 'anything-match-plugin nil t)
-      (when (require 'anything-complete nil t)
-        (anything-lisp-complete-symbol-set-timer 150))
-      (require 'anything-show-completion nil t)
-      (when (require 'auto-install nil t)
-        (require 'anything-auto-install nil t))
-      (when (require 'descbinds-anything nil t)
-        (descbinds-anything-install))
-      (require 'anything-c-moccur)
-      (setq moccur-split-word t)
-      (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-      (global-set-key (kbd "C-:") 'anything-for-files)
-      (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
-      (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
-      ))
-  
-(when (require 'helm-config nil t)
-  (global-set-key (kbd "C-c h") 'helm-mini)
-  (helm-mode 1)
-  (setq helm-idle-delay 0.2
-        helm-input-idle-delay 0.2
-        helm-quick-update t))
+(when (require 'anything nil t)
+  (setq
+   anything-idle-delay 0.3
+   anything-input-idle-delay 0.2
+   anything-quick-update t
+   anything-enable-shortcuts 'alphabet)
+  (when (require 'anything-config nil t)
+    (setq
+     anything-su-or-sudo "sudo"))
+  (require 'anything-match-plugin nil t)
+  (when (require 'anything-complete nil t)
+    (anything-lisp-complete-symbol-set-timer 150))
+  (require 'anything-show-completion nil t)
+  (when (require 'auto-install nil t)
+    (require 'anything-auto-install nil t))
+  (when (require 'descbinds-anything nil t)
+    (descbinds-anything-install))
+  (require 'anything-c-moccur)
+  (setq moccur-split-word t)
+  (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
+  (global-set-key (kbd "C-:") 'anything-for-files)
+  (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
+  (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur))
 
 (require 'egg)
 
