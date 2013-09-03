@@ -118,7 +118,7 @@
   (require 'anything-c-moccur)
   (setq moccur-split-word t)
   (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-  (global-set-key (kbd "C-:") 'anything-for-files)
+  (global-set-key (kbd "C-x b") 'anything-for-files)
   (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
   (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur))
 
