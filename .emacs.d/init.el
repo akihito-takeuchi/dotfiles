@@ -11,6 +11,8 @@
 (setq frame-title-format
       (format "%%f - Emacs@%s" (system-name)))
 
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (when (> emacs-major-version 23)
   (defvar user-emacs-directory "~/.emacs.d"))
 
@@ -24,12 +26,37 @@
 
 (add-to-load-path "elisp" "conf" "public_repos")
 
+; (install-elisp "http://bit.ly/pkg-el23")
+; package.el
 (when (= emacs-major-version 23)
   (when (require 'package nil t)
-    (add-to-list 'package-archives
-                 '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+    (add-to-list 'package-archives '("marmlade". "http://marmalade-repo.org/packages/"))
     (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
     (package-initialize)))
+
+(require 'helm-config)
+
+(setq
+ ; delay time for show suggested list. (default 0.5)
+ helm-idle-delay 0.01
+ ; delay time from typing to re-painting. (default 0.1)
+ helm-input-idle-delay 0.1
+ ; max suggestion (default 50)
+ helm-candidate-number-limit 30
+ ; boost when many suggestion exist.
+ helm-quick-update t
+ ; use alphabet for shortcut of suggestion
+ ; helm-enable-shortcuts 'alphabet
+ )
+
+(define-key global-map (kbd "M-y") 'helm-show-kill-ring)
+(setq kill-ring-max 20)
+(setq helm-kill-ring-threshold 5)
+(define-key global-map (kbd "C-x b") 'helm-mini)
+(define-key global-map (kbd "M-x") 'helm-M-x)
+
 
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
@@ -98,29 +125,29 @@
 
 ;; (auto-install-batch "anything")
 ;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
-(when (require 'anything nil t)
-  (setq
-   anything-idle-delay 0.3
-   anything-input-idle-delay 0.2
-   anything-quick-update t
-   anything-enable-shortcuts 'alphabet)
-  (when (require 'anything-config nil t)
-    (setq
-     anything-su-or-sudo "sudo"))
-  (require 'anything-match-plugin nil t)
-  (when (require 'anything-complete nil t)
-    (anything-lisp-complete-symbol-set-timer 150))
-  (require 'anything-show-completion nil t)
-  (when (require 'auto-install nil t)
-    (require 'anything-auto-install nil t))
-  (when (require 'descbinds-anything nil t)
-    (descbinds-anything-install))
-  (require 'anything-c-moccur)
-  (setq moccur-split-word t)
-  (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-  (global-set-key (kbd "C-x b") 'anything-for-files)
-  (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
-  (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur))
+;; (when (require 'anything nil t)
+;;   (setq
+;;    anything-idle-delay 0.3
+;;    anything-input-idle-delay 0.2
+;;    anything-quick-update t
+;;    anything-enable-shortcuts 'alphabet)
+;;   (when (require 'anything-config nil t)
+;;     (setq
+;;      anything-su-or-sudo "sudo"))
+;;   (require 'anything-match-plugin nil t)
+;;   (when (require 'anything-complete nil t)
+;;     (anything-lisp-complete-symbol-set-timer 150))
+;;   (require 'anything-show-completion nil t)
+;;   (when (require 'auto-install nil t)
+;;     (require 'anything-auto-install nil t))
+;;   (when (require 'descbinds-anything nil t)
+;;     (descbinds-anything-install))
+;;   (require 'anything-c-moccur)
+;;   (setq moccur-split-word t)
+;;   (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
+;;   (global-set-key (kbd "C-x b") 'anything-for-files)
+;;   (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
+;;   (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur))
 
 (require 'egg)
 
@@ -318,11 +345,19 @@
 	    (setq nxml-child-indent 2)
             (define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)))
 (when (require 'w3m-load nil t)
-  (global-set-key (kbd "C-c w") 'w3m-goto-url)
+  (global-set-key (kbd "C-c w") 'w3m-search)
   (setq w3m-home-page "http://www.google.co.jp")
   (add-hook 'w3m-mode-hook
             (lambda ()
-              (define-key w3m-mode-map (kbd "C-t") 'other-window))))
+              (define-key w3m-mode-map (kbd "C-t") 'other-window)
+              (define-key w3m-mode-map (kbd "<down>") 'next-line)
+              (define-key w3m-mode-map (kbd "<up>") 'previous-line)
+              (define-key w3m-mode-map (kbd "<left>") 'backward-char)
+              (define-key w3m-mode-map (kbd "<right>") 'forward-char)
+              (define-key w3m-mode-map (kbd "<C-down>") 'w3m-next-anchor)
+              (define-key w3m-mode-map (kbd "<C-up>") 'w3m-previous-anchor)
+              (define-key w3m-mode-map (kbd "<C-left>") 'w3m-view-previous-page)
+              (define-key w3m-mode-map (kbd "<C-right>") 'w3m-view-this-url))))
 
 ;------------------------
 ; Setup for python mode
