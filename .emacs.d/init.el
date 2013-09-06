@@ -26,6 +26,11 @@
 
 (add-to-load-path "elisp" "conf" "public_repos")
 
+(when (require 'auto-install nil t)
+  (setq auto-install-directory "~/.emacs.d/elisp/")
+  (auto-install-update-emacswiki-package-name t)
+  (auto-install-compatibility-setup))
+
 ; (install-elisp "http://bit.ly/pkg-el23")
 ; package.el
 (when (= emacs-major-version 23)
@@ -57,11 +62,6 @@
 (define-key global-map (kbd "C-x b") 'helm-mini)
 (define-key global-map (kbd "M-x") 'helm-M-x)
 
-
-(when (require 'auto-install nil t)
-  (setq auto-install-directory "~/.emacs.d/elisp/")
-  (auto-install-update-emacswiki-package-name t)
-  (auto-install-compatibility-setup))
 
 ;; (install-elisp-from-emacswiki "redo+.el")
 (when (require 'redo+ nil t)
