@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Python header TJ
+# key: Python_header_tj
+# --
+# -*- coding: utf-8 -*-
+#
+# Copyright 2013 TowerJazz Japan Ltd.
+#
+# This file is confidential and proprietary of TowerJazz Japan Ltd.
+#
+# Author: Akihito Takeuchi
+#
+
+
+from __future__ import print_function
+
