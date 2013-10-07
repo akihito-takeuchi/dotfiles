@@ -394,28 +394,18 @@
 ;------------------------
 ; Setup for python mode
 ;------------------------
-;; (setenv "PYMACS_PYTHON" "python2.7")
-;; (setq load-path
-;;       (append (list nil
-;; 		    "~/.emacs.d/"
-;; 		    "~/.emacs.d/python-mode.el-6.1.0"
-;; 		    "~/.emacs.d/Pymacs-0.25"
-;; 		    "~/.emacs.d/ropemacs-0.7"
-;; 		    "~/.emacs.d/ipython-0.13.1"
-;; 		    )
-;; 	      load-path))
-;; (require 'ipython)
-;; (setq py-python-command-args '( "--colors" "Linux"))
-;; (require 'python-mode)
-;; (require 'pymacs)
-;; (autoload 'python-mode "python-mode" "Python Mode." t)
-;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-;; (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; (autoload 'pymacs-apply "pymacs")
-;; (autoload 'pymacs-call "pymacs")
-;; (autoload 'pymacs-eval "pymacs" nil t)
-;; (autoload 'pymacs-exec "pymacs" nil t)
-;; (autoload 'pymacs-load "pymacs" nil t)
-;; (pymacs-load "ropemacs" "rope-")
-;; (setq ropemacs-enable-autoimport t)
-
+; pymacs installation
+; % pip install rope ropemacs
+; % pip install -e "git+https://github.com/pinard/Pymacs.git#egg=Pymacs"
+; % cd $VIRTUAL_ENV/src/pymacs
+; % make
+; % cp pymacs.el ~/.emacs.d/elisp/
+(setenv "PYMACS_PYTHON" "python2.7")
+(require 'pymacs)
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
