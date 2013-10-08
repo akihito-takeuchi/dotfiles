@@ -26,6 +26,26 @@
 
 (add-to-load-path "elisp" "conf" "public_repos")
 
+;------------------------
+; Setup for python mode
+;------------------------
+; pymacs installation
+; % pip install rope ropemacs
+; % pip install -e "git+https://github.com/pinard/Pymacs.git#egg=Pymacs"
+; % cd $VIRTUAL_ENV/src/pymacs
+; % make
+; % cp pymacs.el ~/.emacs.d/elisp/
+(setq py-load-pymacs-p nil)
+(setenv "PYMACS_PYTHON" "python2.7")
+(require 'pymacs)
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
+
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
   (auto-install-update-emacswiki-package-name t)
@@ -394,25 +414,6 @@
 
 ;; snippet-mode for *.yasnippet files
 (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
-
-;------------------------
-; Setup for python mode
-;------------------------
-; pymacs installation
-; % pip install rope ropemacs
-; % pip install -e "git+https://github.com/pinard/Pymacs.git#egg=Pymacs"
-; % cd $VIRTUAL_ENV/src/pymacs
-; % make
-; % cp pymacs.el ~/.emacs.d/elisp/
-(setenv "PYMACS_PYTHON" "python2.7")
-(require 'pymacs)
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
 
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
