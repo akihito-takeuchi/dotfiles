@@ -113,7 +113,10 @@
 ;; (install-elisp-from-emacswiki "multi-shell.el")
 (when (require 'multi-term nil t)
   (setq multi-term-program "/bin/bash")
-  (global-set-key (kbd "M-s") 'multi-term))
+  (global-set-key (kbd "M-s") 'multi-term)
+  (add-hook 'term-mode-hook
+          (lambda ()
+            (define-key term-raw-map (kbd "C-t") 'other-window))))
 
 ;; (auto-install-batch "sequential-command")
 (when (require 'sequential-command-config nil t)
@@ -186,6 +189,7 @@
 
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
+(global-set-key (kbd "<C-kp-enter>") 'cua-set-rectangle-mark)
 
 (global-set-key [delete] 'delete-char)
 (global-set-key "\M-g" 'goto-line)
