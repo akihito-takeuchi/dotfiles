@@ -104,13 +104,13 @@
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
                "~/.emacs.d/elisp/ac-dict")
-  (define-key ac-mode-map (kbd "C-TAB") 'auto-complete)
+  (define-key ac-mode-map (kbd "<C-tab>") 'auto-complete)
   (setq ac-auto-start 4)
   (ac-config-default)
   (setq ac-delay 0.1)
   (setq ac-auto-show-menu 0.2))
 
-;; (install-elisp-from-emacswiki "multi-shell.el")
+;; (install-elisp-from-emacswiki "multi-term.el")
 (when (require 'multi-term nil t)
   (setq multi-term-program "/bin/bash")
   (global-set-key (kbd "M-s") 'multi-term)
@@ -413,3 +413,6 @@
 (autoload 'pymacs-load "pymacs" nil t)
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
+
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
