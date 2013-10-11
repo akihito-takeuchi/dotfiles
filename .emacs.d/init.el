@@ -219,10 +219,6 @@
 (global-set-key "\C-\\" 'toggle-input-method)
 ;[f1] is help for help.
 (global-set-key [f2] 'call-last-kbd-macro)
-(global-set-key [f3] 'find-file)
-(global-set-key [f4] 'grep)
-(global-set-key [f5] 'toggle-viper-mode)
-(global-set-key [f11] 'kill-this-buffer)
 (global-set-key [f12] 'new-frame)
 (global-set-key [pause] 'advertised-undo)
 (global-set-key (kbd "C-x ?") 'help-command)
