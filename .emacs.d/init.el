@@ -45,6 +45,9 @@
 (autoload 'pymacs-load "pymacs" nil t)
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (add-to-list 'ac-sources 'ac-source-yasnippet)))
 
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
@@ -120,15 +123,46 @@
   (setq key-chord-two-keys-delay 0.04)
   (key-chord-mode 1))
 
+(require 'yasnippet)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets"
+        "~/.emacs.d/public_repos/yasnippet/snippets"))
+(yas-global-mode 1)
+(custom-set-variables '(yas-trigger-key "TAB"))
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
+
+(eval-after-load "helm-config"
+  '(progn
+     (defun my-yas/prompt (prompt choices &optional display-fn)
+       (let* ((names (loop for choice in choices
+                           collect (or (and display-fn (funcall display-fn choice))
+                                       choice)))
+              (selected (helm-other-buffer
+                         `(((name . ,(format "%s" prompt))
+                            (candidates . names)
+                            (action . (("Insert snippet" . (lambda (arg) arg))))))
+                         "*helm yas/prompt*")))
+         (if selected
+             (let ((n (position selected names :test 'equal)))
+               (nth n choices))
+           (signal 'quit "user quit!"))))
+     (custom-set-variables '(yas/prompt-functions '(my-yas/prompt)))
+     (define-key helm-command-map (kbd "y") 'yas/insert-snippet)))
+
+;; snippet-mode for *.yasnippet files
+(add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
+
 ;; (auto-install-batch "auto-complete development version")
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
                "~/.emacs.d/elisp/ac-dict")
-  (define-key ac-mode-map (kbd "<C-tab>") 'auto-complete)
-  (setq ac-auto-start 4)
+  (setq ac-auto-start 2)
   (ac-config-default)
   (setq ac-delay 0.1)
-  (setq ac-auto-show-menu 0.2))
+  (setq ac-auto-show-menu 0.2)
+  (define-key ac-completing-map (kbd "<C-tab>") 'ac-stop))
 
 ;; (install-elisp-from-emacswiki "multi-term.el")
 (when (require 'multi-term nil t)
@@ -379,37 +413,6 @@
               (define-key w3m-mode-map (kbd "<C-up>") 'w3m-previous-anchor)
               (define-key w3m-mode-map (kbd "<C-left>") 'w3m-view-previous-page)
               (define-key w3m-mode-map (kbd "<C-right>") 'w3m-view-this-url))))
-
-(require 'yasnippet)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/snippets"
-        "~/.emacs.d/public_repos/yasnippet/snippets"))
-(yas-global-mode 1)
-(custom-set-variables '(yas-trigger-key "TAB"))
-(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
-(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
-(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
-
-(eval-after-load "helm-config"
-  '(progn
-     (defun my-yas/prompt (prompt choices &optional display-fn)
-       (let* ((names (loop for choice in choices
-                           collect (or (and display-fn (funcall display-fn choice))
-                                       choice)))
-              (selected (helm-other-buffer
-                         `(((name . ,(format "%s" prompt))
-                            (candidates . names)
-                            (action . (("Insert snippet" . (lambda (arg) arg))))))
-                         "*helm yas/prompt*")))
-         (if selected
-             (let ((n (position selected names :test 'equal)))
-               (nth n choices))
-           (signal 'quit "user quit!"))))
-     (custom-set-variables '(yas/prompt-functions '(my-yas/prompt)))
-     (define-key helm-command-map (kbd "y") 'yas/insert-snippet)))
-
-;; snippet-mode for *.yasnippet files
-(add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
 
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
