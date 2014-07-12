@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Python header
+# key: Python_header
+# --
+# -*- coding: utf-8 -*-
+#
+# Author: Akihito Takeuchi
+#
+
+
+from __future__ import print_function
+
