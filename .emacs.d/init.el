@@ -35,19 +35,19 @@
 ; % cd $VIRTUAL_ENV/src/pymacs
 ; % make
 ; % cp pymacs.el ~/.emacs.d/elisp/
-(setq py-load-pymacs-p nil)
-(setenv "PYMACS_PYTHON" "python2.7")
-(require 'pymacs)
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
-(add-hook 'python-mode-hook
-          (lambda ()
-            (add-to-list 'ac-sources 'ac-source-yasnippet)))
+;(setq py-load-pymacs-p nil)
+;(setenv "PYMACS_PYTHON" "python2.7")
+;(require 'pymacs)
+;(autoload 'pymacs-apply "pymacs")
+;(autoload 'pymacs-call "pymacs")
+;(autoload 'pymacs-eval "pymacs" nil t)
+;(autoload 'pymacs-exec "pymacs" nil t)
+;(autoload 'pymacs-load "pymacs" nil t)
+;(pymacs-load "ropemacs" "rope-")
+;(setq ropemacs-enable-autoimport t)
+;(add-hook 'python-mode-hook
+;          (lambda ()
+;            (add-to-list 'ac-sources 'ac-source-yasnippet)))
 
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
@@ -176,10 +176,10 @@
 (when (require 'sequential-command-config nil t)
   (sequential-command-setup-keys))
 
-(load-file "~/.emacs.d/public_repos/cedet-1.1/common/cedet.el")
-(global-ede-mode 1)
-(semantic-load-enable-code-helpers)
-(global-srecode-minor-mode 1)
+;; (load-file "~/.emacs.d/public_repos/cedet-1.1/common/cedet.el")
+;; (global-ede-mode 1)
+;; (semantic-load-enable-code-helpers)
+;; (global-srecode-minor-mode 1)
 
 ;; (auto-install-batch "anything")
 ;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
@@ -278,32 +278,6 @@
               auto-mode-alist))
 
 (delete-selection-mode 1)
-
-;; (auto-instal-from-url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
-(when (require 'php-mode nil t)
-  (setq php-mode-force-pear t)
-  (add-to-list 'auto-mode-alist '("\\.php$" . php-mode)))
-;; (auto-install-batch "php-completion")
-(add-hook 'php-completion
-          (lambda ()
-            (require 'php-completion)
-            (php-completion-mode t)
-            (define-key php-mode-map (kbd "C-o") 'phpcomp-complete)
-            (make-local-variable 'ac-sources)
-            (setq  ac-sources '(
-                               ac-source-words-in-same-mode-buffers
-                               ac-source-php-completion
-                               ac-source-filename
-                               ))))
-(require 'cl)
-(when (require 'cake nil t)
-  (global-cake t)
-  (cake-set-default-keymap)
-  (add-hook 'php-mode-hook
-            (lambda ()
-              (make-local-variable 'ac-sources)
-              (setq ac-sources '(ac-source-cake
-                                 ac-source-php-completion)))))
 
 (autoload 'cperl-mode
   "cperl-mode"
