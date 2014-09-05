@@ -176,11 +176,6 @@
 (when (require 'sequential-command-config nil t)
   (sequential-command-setup-keys))
 
-;; (load-file "~/.emacs.d/public_repos/cedet-1.1/common/cedet.el")
-;; (global-ede-mode 1)
-;; (semantic-load-enable-code-helpers)
-;; (global-srecode-minor-mode 1)
-
 ;; (auto-install-batch "anything")
 ;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
 ;; (when (require 'anything nil t)
@@ -302,7 +297,7 @@
               auto-mode-alist))
 
 (setq show-paren-delay 0)
-(show-paren-mode t)
+(show-paren-mode 1)
 (setq show-paren-style 'expression)
 (set-face-background 'show-paren-match-face nil)
 (set-face-underline-p 'show-paren-match-face "yellow")
@@ -390,3 +385,53 @@
 
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; From emacs mail magazine
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; (install-elisp-from-emacswiki "open-junk-file.el")
+;; (install-elisp-from-emacswiki "lispxmp.el")
+;; (install-elisp "http://mumble.net/~campbell/emacs/paredit.el")
+;; (install-elisp-from-emacswiki "auto-async-byte-compile.el")
+
+;;;試行錯誤用ファイルを開くための設定
+(require 'open-junk-file) 
+;; C-x C-zで試行錯誤ファイルを開く
+(global-set-key (kbd "C-x C-z") 'open-junk-file) 
+;;;式の評価結果を注釈するための設定
+(require 'lispxmp) 
+;; emacs-lisp-modeでC-c C-dを押すと注釈される
+(define-key emacs-lisp-mode-map (kbd "C-c C-d") 'lispxmp) 
+;;;括弧の対応を保持して編集する設定
+(require 'paredit) 
+(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode) 
+(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode) 
+(add-hook 'lisp-mode-hook 'enable-paredit-mode) 
+(add-hook 'ielm-mode-hook 'enable-paredit-mode) 
+(require 'auto-async-byte-compile) 
+;;自動バイトコンパイルを無効にするファイル名の正規表現
+(setq auto-async-byte-compile-exclude-files-regexp "/junk/") 
+(add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode) 
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode) 
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode) 
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode) 
+(setq eldoc-idle-delay 0.2) ;すぐに表示したい
+(setq eldoc-minor-mode-string "") ;モードラインにElDocと表示しない
+;; find-functionをキー割り当てする
+(find-function-setup-keys)
+;; ELPA/Marmalade/MELPAパッケージの設定
+(require 'package)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(setq url-http-attempt-keepalives nil) ; To fix MELPA problem.
+
+(package-refresh-contents)
+(package-initialize)
+
+(require 'org)
+(setq org-directory "~/org-demo/")
+(setq org-capture-templates
+      '(("m" "Memo" entry (file+headline "memo.org" "Memo")
+         "** %U%?\n%i\n")))
+(global-set-key (kbd "C-c c") 'org-capture)
