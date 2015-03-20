@@ -26,6 +26,15 @@
 
 (add-to-load-path "elisp" "conf" "public_repos")
 
+;; ELPA/Marmalade/MELPAパッケージの設定
+(require 'package)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(setq url-http-attempt-keepalives nil) ; To fix MELPA problem.
+; (package-refresh-contents)
+  
+(package-initialize)
+
 ;------------------------
 ; Setup for python mode
 ;------------------------
@@ -54,16 +63,6 @@
   (auto-install-update-emacswiki-package-name t)
   (auto-install-compatibility-setup))
 
-; (install-elisp "http://bit.ly/pkg-el23")
-; package.el
-(when (= emacs-major-version 23)
-  (when (require 'package nil t)
-    (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-    (add-to-list 'package-archives '("marmlade". "http://marmalade-repo.org/packages/"))
-    (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
-    (package-initialize)))
-
 (require 'helm-config)
 
 (setq
@@ -83,8 +82,12 @@
 (setq kill-ring-max 20)
 (setq helm-kill-ring-threshold 5)
 (define-key global-map (kbd "C-x b") 'helm-mini)
-(define-key global-map (kbd "M-x") 'helm-M-x)
+;(define-key global-map (kbd "M-x") 'helm-M-x)
 
+(setq helm-exit-idle-delay nil)
+
+;; (package-install 'helm-descbinds)
+(helm-descbinds-install)
 
 ;; (install-elisp-from-emacswiki "redo+.el")
 (when (require 'redo+ nil t)
@@ -175,32 +178,6 @@
 ;; (auto-install-batch "sequential-command")
 (when (require 'sequential-command-config nil t)
   (sequential-command-setup-keys))
-
-;; (auto-install-batch "anything")
-;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
-;; (when (require 'anything nil t)
-;;   (setq
-;;    anything-idle-delay 0.3
-;;    anything-input-idle-delay 0.2
-;;    anything-quick-update t
-;;    anything-enable-shortcuts 'alphabet)
-;;   (when (require 'anything-config nil t)
-;;     (setq
-;;      anything-su-or-sudo "sudo"))
-;;   (require 'anything-match-plugin nil t)
-;;   (when (require 'anything-complete nil t)
-;;     (anything-lisp-complete-symbol-set-timer 150))
-;;   (require 'anything-show-completion nil t)
-;;   (when (require 'auto-install nil t)
-;;     (require 'anything-auto-install nil t))
-;;   (when (require 'descbinds-anything nil t)
-;;     (descbinds-anything-install))
-;;   (require 'anything-c-moccur)
-;;   (setq moccur-split-word t)
-;;   (global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-;;   (global-set-key (kbd "C-x b") 'anything-for-files)
-;;   (define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
-;;   (define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur))
 
 (require 'egg)
 
@@ -390,6 +367,7 @@
 ; From emacs mail magazine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;; (install-elisp-from-emacswiki "open-junk-file.el")
 ;; (install-elisp-from-emacswiki "lispxmp.el")
 ;; (install-elisp "http://mumble.net/~campbell/emacs/paredit.el")
@@ -420,18 +398,27 @@
 (setq eldoc-minor-mode-string "") ;モードラインにElDocと表示しない
 ;; find-functionをキー割り当てする
 (find-function-setup-keys)
-;; ELPA/Marmalade/MELPAパッケージの設定
-(require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(setq url-http-attempt-keepalives nil) ; To fix MELPA problem.
-
-(package-refresh-contents)
-(package-initialize)
-
+ 
 (require 'org)
 (setq org-directory "~/org-demo/")
 (setq org-capture-templates
       '(("m" "Memo" entry (file+headline "memo.org" "Memo")
          "** %U%?\n%i\n")))
 (global-set-key (kbd "C-c c") 'org-capture)
+ 
+(setq org-agenda-start-with-log-mode t)
+;;; inbox.orgのサンプルにあわせ、今日から30日分の予定を表示させる
+(setq org-agenda-span 30)
+;;; org-agendaで扱うorgファイルたち
+(setq org-agenda-files '("~/org-demo/inbox.org" "~/org-demo/daily-projects.org"))
+;;; C-c a aでagendaを起動する
+;;; agendaには、習慣・スケジュール・TODOを表示させる
+(global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-agenda-custom-commands
+      '(("a" "Agenda and all TODO's"
+         ((tags "project-CLOCK=>\"<today>\"|repeatable") (agenda "") (alltodo)))))
+;;; <f6>で直接org習慣仕事術用agendaを起動させる
+(defun org-agenda-default ()
+  (interactive)
+  (org-agenda nil "a"))
+(global-set-key (kbd "<f6>") 'org-agenda-default)
