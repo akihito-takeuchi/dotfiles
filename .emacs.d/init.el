@@ -82,16 +82,16 @@
 (setq kill-ring-max 20)
 (setq helm-kill-ring-threshold 5)
 (define-key global-map (kbd "C-x b") 'helm-mini)
-;(define-key global-map (kbd "M-x") 'helm-M-x)
+(define-key global-map (kbd "M-x") 'helm-M-x)
 
-(setq helm-exit-idle-delay nil)
+;(setq helm-exit-idle-delay nil)
 
 ;; (package-install 'helm-descbinds)
 (helm-descbinds-install)
 
 ;; (install-elisp-from-emacswiki "redo+.el")
 (when (require 'redo+ nil t)
-  (global-set-key (kbd "C-'") 'redo))
+(global-set-key (kbd "C-'") 'redo))
 
 ;; (install-elisp-from-emacswiki "color-moccur.el")
 ;; (install-elisp-from-emacswiki "moccur-edit.el")
@@ -398,7 +398,7 @@
 (setq eldoc-minor-mode-string "") ;モードラインにElDocと表示しない
 ;; find-functionをキー割り当てする
 (find-function-setup-keys)
- 
+
 (require 'org)
 (setq org-directory "~/org-demo/")
 (setq org-capture-templates
