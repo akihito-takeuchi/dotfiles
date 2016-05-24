@@ -60,7 +60,7 @@
 
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
-  (auto-install-update-emacswiki-package-name t)
+;  (auto-install-update-emacswiki-package-name t)
   (auto-install-compatibility-setup))
 
 (require 'helm-config)
@@ -191,7 +191,7 @@
 
 (setq visible-bell nil)
 
-(add-to-list 'default-frame-alist '(font . "mono:size=15"))
+(add-to-list 'default-frame-alist '(font . "mono:size=14"))
 
 (setq-default indent-tabs-mode nil)
 
@@ -222,7 +222,7 @@
 (global-set-key "\C-c\C-r" 'revert-buffer)
 (global-set-key "\C-c\C-w" 'font-lock-fontify-buffer)
 (global-set-key "\M-\C-u" 'query-replace-regexp)
-(global-set-key "\C-\\" 'toggle-input-method)
+(global-set-key (kbd "C-c \\") 'toggle-input-method)
 ;[f1] is help for help.
 (global-set-key [f2] 'call-last-kbd-macro)
 (global-set-key [f12] 'new-frame)
@@ -399,26 +399,26 @@
 ;; find-functionをキー割り当てする
 (find-function-setup-keys)
 
-(require 'org)
-(setq org-directory "~/org-demo/")
-(setq org-capture-templates
-      '(("m" "Memo" entry (file+headline "memo.org" "Memo")
-         "** %U%?\n%i\n")))
-(global-set-key (kbd "C-c c") 'org-capture)
- 
-(setq org-agenda-start-with-log-mode t)
-;;; inbox.orgのサンプルにあわせ、今日から30日分の予定を表示させる
-(setq org-agenda-span 30)
-;;; org-agendaで扱うorgファイルたち
-(setq org-agenda-files '("~/org-demo/inbox.org" "~/org-demo/daily-projects.org"))
-;;; C-c a aでagendaを起動する
-;;; agendaには、習慣・スケジュール・TODOを表示させる
-(global-set-key (kbd "C-c a") 'org-agenda)
-(setq org-agenda-custom-commands
-      '(("a" "Agenda and all TODO's"
-         ((tags "project-CLOCK=>\"<today>\"|repeatable") (agenda "") (alltodo)))))
-;;; <f6>で直接org習慣仕事術用agendaを起動させる
-(defun org-agenda-default ()
-  (interactive)
-  (org-agenda nil "a"))
-(global-set-key (kbd "<f6>") 'org-agenda-default)
+; (require 'org)
+; (setq org-directory "~/org-demo/")
+; (setq org-capture-templates
+;       '(("m" "Memo" entry (file+headline "memo.org" "Memo")
+;          "** %U%?\n%i\n")))
+; (global-set-key (kbd "C-c c") 'org-capture)
+;  
+; (setq org-agenda-start-with-log-mode t)
+; ;;; inbox.orgのサンプルにあわせ、今日から30日分の予定を表示させる
+; (setq org-agenda-span 30)
+; ;;; org-agendaで扱うorgファイルたち
+; (setq org-agenda-files '("~/org-demo/inbox.org" "~/org-demo/daily-projects.org"))
+; ;;; C-c a aでagendaを起動する
+; ;;; agendaには、習慣・スケジュール・TODOを表示させる
+; (global-set-key (kbd "C-c a") 'org-agenda)
+; (setq org-agenda-custom-commands
+;       '(("a" "Agenda and all TODO's"
+;          ((tags "project-CLOCK=>\"<today>\"|repeatable") (agenda "") (alltodo)))))
+; ;;; <f6>で直接org習慣仕事術用agendaを起動させる
+; (defun org-agenda-default ()
+;   (interactive)
+;   (org-agenda nil "a"))
+; (global-set-key (kbd "<f6>") 'org-agenda-default)
