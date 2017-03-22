@@ -2,6 +2,13 @@
 ; EMACS configuration 
 ;--------------------------------------------------------------------------
 
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (setq inhibit-startup-screen t)
 (setq line-number-mode t)
 (setq column-number-mode t)
@@ -26,42 +33,11 @@
 
 (add-to-load-path "elisp" "conf" "public_repos")
 
-;; ELPA/Marmalade/MELPAパッケージの設定
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(setq url-http-attempt-keepalives nil) ; To fix MELPA problem.
-; (package-refresh-contents)
-  
-(package-initialize)
-
-;------------------------
-; Setup for python mode
-;------------------------
-; pymacs installation
-; % pip install rope ropemacs
-; % pip install -e "git+https://github.com/pinard/Pymacs.git#egg=Pymacs"
-; % cd $VIRTUAL_ENV/src/pymacs
-; % make
-; % cp pymacs.el ~/.emacs.d/elisp/
-;(setq py-load-pymacs-p nil)
-;(setenv "PYMACS_PYTHON" "python2.7")
-;(require 'pymacs)
-;(autoload 'pymacs-apply "pymacs")
-;(autoload 'pymacs-call "pymacs")
-;(autoload 'pymacs-eval "pymacs" nil t)
-;(autoload 'pymacs-exec "pymacs" nil t)
-;(autoload 'pymacs-load "pymacs" nil t)
-;(pymacs-load "ropemacs" "rope-")
-;(setq ropemacs-enable-autoimport t)
-;(add-hook 'python-mode-hook
-;          (lambda ()
-;            (add-to-list 'ac-sources 'ac-source-yasnippet)))
-
-(when (require 'auto-install nil t)
-  (setq auto-install-directory "~/.emacs.d/elisp/")
-;  (auto-install-update-emacswiki-package-name t)
-  (auto-install-compatibility-setup))
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/")) 
 
 (require 'helm-config)
 
@@ -84,14 +60,10 @@
 (define-key global-map (kbd "C-x b") 'helm-mini)
 (define-key global-map (kbd "M-x") 'helm-M-x)
 
-;(setq helm-exit-idle-delay nil)
-
-;; (package-install 'helm-descbinds)
-(helm-descbinds-install)
-
-;; (install-elisp-from-emacswiki "redo+.el")
-(when (require 'redo+ nil t)
-(global-set-key (kbd "C-'") 'redo))
+;; install package undo-tree
+(require 'undo-tree)
+(global-undo-tree-mode t)
+(global-set-key (kbd "C-'") 'undo-tree-redo)
 
 ;; (install-elisp-from-emacswiki "color-moccur.el")
 ;; (install-elisp-from-emacswiki "moccur-edit.el")
@@ -110,18 +82,12 @@
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
-(iswitchb-mode 1)
-(setq read-buffer-function 'iswitchb-read-buffer)
-(setq iswitchb-regexp nil)
-(setq iswitchb-prompt-newbuffer nil)
-
-;; (install-elisp-from-emacswiki "recentf-ext.el")
+;; install package recentf-ext
 (setq recentf-max-saved-items 500)
 (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
-(require 'recentf-ext)
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
-;; (install-elisp-from-emacswiki "key-chord.el")
+;; install package key-chord
 (when (require 'key-chord nil t)
   (setq key-chord-two-keys-delay 0.04)
   (key-chord-mode 1))
@@ -131,7 +97,17 @@
       '("~/.emacs.d/snippets"
         "~/.emacs.d/public_repos/yasnippet/snippets"))
 (yas-global-mode 1)
-(custom-set-variables '(yas-trigger-key "TAB"))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yasnippet undo-tree sequential-command redo+ recentf-ext paredit open-junk-file moccur-edit key-chord helm-descbinds auto-complete auto-async-byte-compile)))
+ '(user-mail-address "atakeuti2@gmail.com")
+ '(yas-prompt-functions (quote (my-yas/prompt)))
+ '(yas-trigger-key "TAB"))
 (define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
 (define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
@@ -179,7 +155,7 @@
 (when (require 'sequential-command-config nil t)
   (sequential-command-setup-keys))
 
-(require 'egg)
+;(require 'egg)
 
 ;;; colorize files 
 (require 'font-lock)
@@ -237,12 +213,14 @@
 (global-set-key (kbd "C-t") 'other-window)
 (define-key key-translation-map [?\C-h] [?\C-?])
 
-(custom-set-variables
- '(user-mail-address "atakeuti2@gmail.com" t))
+
 
 (custom-set-faces
-  '(default ((t (:foreground "white" :background "black" :size "12pt"))) t)
-)
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:foreground "white" :background "black" :size "12pt")))))
 
 (autoload 'qt-pro-mode "qt-pro" "Qt project file editing mode" t)
 (setq auto-mode-alist
@@ -368,57 +346,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; (install-elisp-from-emacswiki "open-junk-file.el")
-;; (install-elisp-from-emacswiki "lispxmp.el")
-;; (install-elisp "http://mumble.net/~campbell/emacs/paredit.el")
-;; (install-elisp-from-emacswiki "auto-async-byte-compile.el")
+;; install package open-junk-file
 
-;;;試行錯誤用ファイルを開くための設定
-(require 'open-junk-file) 
-;; C-x C-zで試行錯誤ファイルを開く
-(global-set-key (kbd "C-x C-z") 'open-junk-file) 
-;;;式の評価結果を注釈するための設定
-(require 'lispxmp) 
-;; emacs-lisp-modeでC-c C-dを押すと注釈される
-(define-key emacs-lisp-mode-map (kbd "C-c C-d") 'lispxmp) 
-;;;括弧の対応を保持して編集する設定
-(require 'paredit) 
-(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode) 
-(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode) 
-(add-hook 'lisp-mode-hook 'enable-paredit-mode) 
-(add-hook 'ielm-mode-hook 'enable-paredit-mode) 
-(require 'auto-async-byte-compile) 
-;;自動バイトコンパイルを無効にするファイル名の正規表現
-(setq auto-async-byte-compile-exclude-files-regexp "/junk/") 
-(add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode) 
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode) 
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode) 
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode) 
-(setq eldoc-idle-delay 0.2) ;すぐに表示したい
-(setq eldoc-minor-mode-string "") ;モードラインにElDocと表示しない
-;; find-functionをキー割り当てする
+;; (require 'open-junk-file)
+;; (setq open-junk-file-format "~/emacsjunk/%Y/%m/%Y-%m-%d-%H%M%S.")
+;; (global-set-key (kbd "C-x C-z") 'open-junk-file) 
+
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(setq eldoc-idle-delay 0.2)
+(setq eldoc-minor-mode-string "")
 (find-function-setup-keys)
-
-; (require 'org)
-; (setq org-directory "~/org-demo/")
-; (setq org-capture-templates
-;       '(("m" "Memo" entry (file+headline "memo.org" "Memo")
-;          "** %U%?\n%i\n")))
-; (global-set-key (kbd "C-c c") 'org-capture)
-;  
-; (setq org-agenda-start-with-log-mode t)
-; ;;; inbox.orgのサンプルにあわせ、今日から30日分の予定を表示させる
-; (setq org-agenda-span 30)
-; ;;; org-agendaで扱うorgファイルたち
-; (setq org-agenda-files '("~/org-demo/inbox.org" "~/org-demo/daily-projects.org"))
-; ;;; C-c a aでagendaを起動する
-; ;;; agendaには、習慣・スケジュール・TODOを表示させる
-; (global-set-key (kbd "C-c a") 'org-agenda)
-; (setq org-agenda-custom-commands
-;       '(("a" "Agenda and all TODO's"
-;          ((tags "project-CLOCK=>\"<today>\"|repeatable") (agenda "") (alltodo)))))
-; ;;; <f6>で直接org習慣仕事術用agendaを起動させる
-; (defun org-agenda-default ()
-;   (interactive)
-;   (org-agenda nil "a"))
-; (global-set-key (kbd "<f6>") 'org-agenda-default)
