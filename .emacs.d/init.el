@@ -7,6 +7,7 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
+
 (package-initialize)
 
 (setq inhibit-startup-screen t)
@@ -20,24 +21,18 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(when (> emacs-major-version 23)
-  (defvar user-emacs-directory "~/.emacs.d"))
+;; (when (> emacs-major-version 23)
+;;   (defvar user-emacs-directory "~/.emacs.d"))
 
-(defun add-to-load-path (&rest paths)
-  (let (path)
-    (dolist (path paths paths)
-      (let ((default-directory (expand-file-name (concat user-emacs-directory path))))
-	(add-to-list 'load-path default-directory)
-	(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-	    (normal-top-level-add-subdirs-to-load-path))))))
-
-(add-to-load-path "elisp" "conf" "public_repos")
-
-(require 'package)
+;; (require 'package)
+;; (add-to-list 'package-archives
+;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+             '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/")) 
+             '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("org" . "http://orgmode.org/elpa/") t)
 
 (require 'helm-config)
 
@@ -60,13 +55,10 @@
 (define-key global-map (kbd "C-x b") 'helm-mini)
 (define-key global-map (kbd "M-x") 'helm-M-x)
 
-;; install package undo-tree
 (require 'undo-tree)
 (global-undo-tree-mode t)
 (global-set-key (kbd "C-'") 'undo-tree-redo)
 
-;; (install-elisp-from-emacswiki "color-moccur.el")
-;; (install-elisp-from-emacswiki "moccur-edit.el")
 (when (require 'color-moccur nil t)
   (define-key global-map (kbd "M-o") 'occur-by-moccur)
   (setq moccur-split-word t)
@@ -82,12 +74,10 @@
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
-;; install package recentf-ext
 (setq recentf-max-saved-items 500)
 (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
-;; install package key-chord
 (when (require 'key-chord nil t)
   (setq key-chord-two-keys-delay 0.04)
   (key-chord-mode 1))
@@ -104,7 +94,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet undo-tree sequential-command redo+ recentf-ext paredit open-junk-file moccur-edit key-chord helm-descbinds auto-complete auto-async-byte-compile)))
+    (cmake-mode goto-chg wgrep multi-term color-moccur yasnippet undo-tree sequential-command redo+ recentf-ext paredit open-junk-file moccur-edit key-chord helm-descbinds auto-complete auto-async-byte-compile)))
  '(user-mail-address "atakeuti2@gmail.com")
  '(yas-prompt-functions (quote (my-yas/prompt)))
  '(yas-trigger-key "TAB"))
@@ -143,7 +133,6 @@
   (setq ac-auto-show-menu 0.2)
   (define-key ac-completing-map (kbd "<C-tab>") 'ac-stop))
 
-;; (install-elisp-from-emacswiki "multi-term.el")
 (when (require 'multi-term nil t)
   (setq multi-term-program "/bin/bash")
   (global-set-key (kbd "M-s") 'multi-term)
@@ -155,8 +144,6 @@
 (when (require 'sequential-command-config nil t)
   (sequential-command-setup-keys))
 
-;(require 'egg)
-
 ;;; colorize files 
 (require 'font-lock)
 ;; turn on font-lock mode
@@ -167,7 +154,7 @@
 
 (setq visible-bell nil)
 
-(add-to-list 'default-frame-alist '(font . "mono:size=14"))
+(add-to-list 'default-frame-alist '(font . "Ricty-13"))
 
 (setq-default indent-tabs-mode nil)
 
@@ -285,30 +272,9 @@
 	       ;(c-set-offset 'case-label +1)
 	       ;(c-set-offset 'statement-case-intro +1)
 	       ;(c-set-offset 'statement-case-open +1)
-	       (setq c-basic-offset 4)
-               (setq semantic-mode 1)
+	       ;; (setq c-basic-offset 4)
                (add-to-list 'ac-sources 'ac-source-semantic)
-               ;; (setq semantic-default-submodes 
-               ;;       '(
-               ;;         global-semantic-idle-scheduler-mode 
-               ;;         global-semantic-idle-completions-mode
-               ;;         global-semanticdb-minor-mode
-               ;;         global-semantic-decoration-mode
-               ;;         global-semantic-highlight-func-mode
-               ;;         global-semantic-stickyfunc-mode
-               ;;         global-semantic-mru-bookmark-mode
-               ;;         ))
                (setq qt4-base-dir (getenv "QTDIR"))
-               (semantic-add-system-include qt4-base-dir 'c++-mode)
-               (semantic-add-system-include (concat qt4-base-dir "QtCore") 'c++-mode)
-               (semantic-add-system-include (concat qt4-base-dir "QtGui") 'c++-mode)
-               (semantic-add-system-include (concat qt4-base-dir "QtTest") 'c++-mode)
-               (semantic-add-system-include (concat qt4-base-dir "QtXml") 'c++-mode)
-               (semantic-add-system-include (concat qt4-base-dir "QtXmlPatterns") 'c++-mode)
-               (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
-               (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
-               (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
-               (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))
 	       )))
 
 (add-hook 'c-mode-hook
@@ -323,20 +289,6 @@
             (setq nxml-slash-auto-complete-flag t)
 	    (setq nxml-child-indent 2)
             (define-key nxml-mode-map (kbd "M-h") 'backward-kill-word)))
-(when (require 'w3m-load nil t)
-  (global-set-key (kbd "C-c w") 'w3m-search)
-  (setq w3m-home-page "http://www.google.co.jp")
-  (add-hook 'w3m-mode-hook
-            (lambda ()
-              (define-key w3m-mode-map (kbd "C-t") 'other-window)
-              (define-key w3m-mode-map (kbd "<down>") 'next-line)
-              (define-key w3m-mode-map (kbd "<up>") 'previous-line)
-              (define-key w3m-mode-map (kbd "<left>") 'backward-char)
-              (define-key w3m-mode-map (kbd "<right>") 'forward-char)
-              (define-key w3m-mode-map (kbd "<C-down>") 'w3m-next-anchor)
-              (define-key w3m-mode-map (kbd "<C-up>") 'w3m-previous-anchor)
-              (define-key w3m-mode-map (kbd "<C-left>") 'w3m-view-previous-page)
-              (define-key w3m-mode-map (kbd "<C-right>") 'w3m-view-this-url))))
 
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -346,11 +298,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; install package open-junk-file
-
-;; (require 'open-junk-file)
-;; (setq open-junk-file-format "~/emacsjunk/%Y/%m/%Y-%m-%d-%H%M%S.")
-;; (global-set-key (kbd "C-x C-z") 'open-junk-file) 
+(require 'open-junk-file)
+(setq open-junk-file-format "~/emacsjunk/%Y/%m/%Y-%m-%d-%H%M%S.")
+(global-set-key (kbd "C-x C-j") 'open-junk-file) 
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
@@ -358,3 +308,6 @@
 (setq eldoc-idle-delay 0.2)
 (setq eldoc-minor-mode-string "")
 (find-function-setup-keys)
+
+(global-set-key (kbd "C-(") 'goto-last-change)
+(global-set-key (kbd "C-)") 'goto-last-change-reverse)
