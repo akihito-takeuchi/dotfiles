@@ -1,0 +1,33 @@
+[Setup]
+
+* Install newer emacs ::
+
+   $ tar xf emacs-xx.x.tar.gz
+   $ cd emacs-xx.x
+   $ ./configure --prefix=/home/[user]/local --with-x-toolkit
+   $ make
+   $ make install
+   # Following command needs to be run after installing emacs mozc
+   $ cd /home/[user]/local/share/emacs/site-lisp
+   $ ln -s /usr/share/emacs/site-lisp/mozc
+
+* Install followings using emacs's package
+
+  - helm
+  - undo-tree
+  - yasnippet
+  - color-moccur
+  - key-chord
+  - auto-complete
+  - multi-term
+  - sequential-command
+  - open-junk-file
+  - wgrep
+  - goto-chg
+  - recentf-ext
+  - cmake-mode
+
+* Install google style ::
+
+   $ git clone https://github.com/google/styleguide.git
+   
