@@ -196,7 +196,7 @@
 (global-set-key (kbd "M-h") 'backward-kill-word)
 (global-set-key (kbd "C-x C-a") 'beginning-of-buffer)
 (global-set-key (kbd "C-x C-m") 'compile)
-(global-set-key (kbd "C-m") 'newline-and-indent)
+(global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "C-t") 'other-window)
 (define-key key-translation-map [?\C-h] [?\C-?])
 
@@ -276,6 +276,8 @@
                (add-to-list 'ac-sources 'ac-source-semantic)
                (setq qt4-base-dir (getenv "QTDIR"))
 	       )))
+(load-file "~/.emacs.d/google-c-style.el")
+(add-hook 'c-mode-common-hook 'google-set-c-style)
 
 (add-hook 'c-mode-hook
 	  '(lambda()
