@@ -82,46 +82,14 @@
   (setq key-chord-two-keys-delay 0.04)
   (key-chord-mode 1))
 
-(require 'yasnippet)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/snippets"
-        "~/.emacs.d/public_repos/yasnippet/snippets"))
-(yas-global-mode 1)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (cmake-mode goto-chg wgrep multi-term color-moccur yasnippet undo-tree sequential-command redo+ recentf-ext paredit open-junk-file moccur-edit key-chord helm-descbinds auto-complete auto-async-byte-compile)))
- '(user-mail-address "atakeuti2@gmail.com")
- '(yas-prompt-functions (quote (my-yas/prompt)))
- '(yas-trigger-key "TAB"))
-(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
-(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
-(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
-
-(eval-after-load "helm-config"
-  '(progn
-     (defun my-yas/prompt (prompt choices &optional display-fn)
-       (let* ((names (loop for choice in choices
-                           collect (or (and display-fn (funcall display-fn choice))
-                                       choice)))
-              (selected (helm-other-buffer
-                         `(((name . ,(format "%s" prompt))
-                            (candidates . names)
-                            (action . (("Insert snippet" . (lambda (arg) arg))))))
-                         "*helm yas/prompt*")))
-         (if selected
-             (let ((n (position selected names :test 'equal)))
-               (nth n choices))
-           (signal 'quit "user quit!"))))
-     (custom-set-variables '(yas/prompt-functions '(my-yas/prompt)))
-     (define-key helm-command-map (kbd "y") 'yas/insert-snippet)))
-
-;; snippet-mode for *.yasnippet files
-(add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
+   '(qml-mode cmake-mode goto-chg wgrep multi-term color-moccur undo-tree sequential-command redo+ recentf-ext paredit open-junk-file moccur-edit key-chord helm-descbinds auto-complete auto-async-byte-compile))
+ '(user-mail-address "atakeuti2@gmail.com"))
 
 ;; (auto-install-batch "auto-complete development version")
 (when (require 'auto-complete-config nil t)
@@ -154,7 +122,7 @@
 
 (setq visible-bell nil)
 
-(add-to-list 'default-frame-alist '(font . "Ricty-13"))
+(add-to-list 'default-frame-alist '(font . "mono"))
 
 (setq-default indent-tabs-mode nil)
 
@@ -241,8 +209,8 @@
 (setq show-paren-delay 0)
 (show-paren-mode 1)
 (setq show-paren-style 'expression)
-(set-face-background 'show-paren-match-face nil)
-(set-face-underline-p 'show-paren-match-face "yellow")
+;; (set-face-attribute 'show-paren-match-face nil)
+;; (set-face-underline-p 'show-paren-match-face "yellow")
 
 (setq auto-mode-alist
       (append (list (cons "\\.\\(cpp\\|h\\)$" 'c++-mode))
