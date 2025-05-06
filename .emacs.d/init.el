@@ -34,7 +34,7 @@
 (add-to-list 'package-archives
              '("org" . "http://orgmode.org/elpa/") t)
 
-(require 'helm-config)
+(require 'helm-autoloads)
 
 (setq
  ; delay time for show suggested list. (default 0.5)
@@ -78,10 +78,6 @@
 (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
-(when (require 'key-chord nil t)
-  (setq key-chord-two-keys-delay 0.04)
-  (key-chord-mode 1))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -122,7 +118,7 @@
 
 (setq visible-bell nil)
 
-(add-to-list 'default-frame-alist '(font . "mono"))
+(add-to-list 'default-frame-alist '(font . "Ricty Diminished-12"))
 
 (setq-default indent-tabs-mode nil)
 
